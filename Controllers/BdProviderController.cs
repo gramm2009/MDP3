@@ -70,7 +70,6 @@ namespace MDP3.Controllers
             return product!;
         }
 
-
         [HttpGet("GetAllProduct")]
         public async Task<List<Product>> GetAllProduct()
         {
@@ -82,7 +81,6 @@ namespace MDP3.Controllers
 
             return products;
         }
-
 
 
         [HttpPost("AddProducer")]
@@ -126,6 +124,24 @@ namespace MDP3.Controllers
             //    ProducerTitle = g.Key,
             //    Count = g.Count()
             //});
+
+            return group;
+        }
+
+
+        [HttpGet("JoitById")]
+        public List<JoinById> JoitById()
+        {
+            var group = _context.Products
+                .Join(_context.Producers,
+                product => product.Id,
+                producer => producer.Id,
+                (product, producer) => new JoinById()
+                {
+                    ProductName = product.Name,
+                    Producer = producer.Title,
+                    ProducerId = producer.Id,
+                }).ToList();
 
             return group;
         }
