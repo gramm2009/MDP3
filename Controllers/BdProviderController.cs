@@ -84,19 +84,18 @@ namespace MDP3.Controllers
 
 
         [HttpPost("AddProducer")]
-        public Producer AddProducer(AddProducerRequest request)
+        public async Task<Producer> AddProducer(AddProducerRequest request)
         {
 
             Producer producer = new() { Title = request.Title };
 
-            bool isProducerEnabled = _context.Producers.Any(p => p.Title == request.Title);
+            bool isProducerEnabled = await _context.Producers.AnyAsync(p => p.Title == request.Title);
 
             if (!isProducerEnabled)
             {
-                _context.Producers.Add(producer);
-                _context.SaveChanges();
+                await _context.Producers.AddAsync(producer);
+                await _context.SaveChangesAsync();
             }
-
 
 
             return producer;
